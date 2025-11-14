@@ -17,8 +17,8 @@ def generate_launch_description():
         ),
         launch_arguments={
             'world': '~/ros2_ws/worlds/generated_maze',
-            'x': '-38.5',
-            'y': '-38.5'
+            'x': '-6.5',
+            'y': '-6.5'
             }.items()
     )
 

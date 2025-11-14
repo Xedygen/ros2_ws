@@ -1,0 +1,31 @@
+# ROS2 / Colcon build folders
+build/
+install/
+log/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Colcon metadata
+.colcon/
+
+# VSCode settings (optional)
+.vscode/
+
+# CLion / JetBrains
+.idea/
+
+# CMake build files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Backup files
+*.bak
+*.swp
+*.swo
+
+# ROS2 launch-generated logs
+*.launch.py~*

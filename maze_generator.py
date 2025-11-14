@@ -121,6 +121,14 @@ def generate_sdf():
     removed_h_walls = set()
     removed_v_walls = set()
     
+    # --- CAMERA POSE CALCULATION ---
+    # Centered (0, 0) above the maze
+    CAM_HEIGHT = maze_width * 1.5  # 150% of the maze width for a good overhead view
+    CAM_PITCH = 1.2  # ~68 degrees looking down (0 is horizontal, 1.57 is straight down)
+    
+    # Format the calculated pose values into the SDF pose string
+    camera_pose = f"0.0 0.0 {CAM_HEIGHT:.2f} 0 {CAM_PITCH:.2f} 0"
+    
     # Run maze generation
     carve(0, 0)
     
@@ -144,7 +152,7 @@ def generate_sdf():
 
         <gui fullscreen="0">
             <camera name="user_camera">
-                <pose>-{maze_width*0.6:.2f} -{maze_height*0.6:.2f} {maze_width*0.9:.2f} 0 0.7 0.8</pose>
+                <pose>{camera_pose}</pose>
                 <view_controller>orbit</view_controller>
             </camera>
         </gui>

@@ -3,192 +3,172 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include <cmath>
 #include <algorithm>
+#include <numeric>
 
-class WallFollowNode : public rclcpp::Node
+using std::placeholders::_1;
+
+// --- Configuration Constants ---
+// These should be tuned based on your robot's speed and maze cell size (1.8m)
+const double LINEAR_SPEED = 1;   // m/s
+const double KP_STEER = 0.8;       // Proportional gain for steering
+const double MAX_ANGULAR_VEL = 0.8; // rad/s (Also used as dedicated turn speed)
+
+// Thresholds for Wall Detection
+const double MAX_CORRIDOR_WIDTH = 1.8; 
+const double MIN_CORRIDOR_WIDTH = 1.8;
+const double MAX_RANGE_REPLACEMENT = 50.0; // Value to use if max range/inf is detected
+
+class MidPathFollower : public rclcpp::Node
 {
 public:
-    WallFollowNode() : Node("wall_follow_node"),
-        desired_distance_(1.5),
-        max_linear_(1.0),
-        max_angular_(2.0),
-        panic_distance_(2.0),
-        min_lidar_range_(0.9),
-        side_threshold_(0.2),
-        min_safe_distance_(1.1),
-        wall_lost_threshold_(4.0),
-        turning_(false),
-        turn_progress_(0.0)
+    MidPathFollower() : Node("mid_path_follower")
     {
+        cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
         scan_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
-            "/scan", 10, std::bind(&WallFollowNode::scan_callback, this, std::placeholders::_1));
-        cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
+            "/scan", 10, std::bind(&MidPathFollower::scanCallback, this, _1));
+        RCLCPP_INFO(this->get_logger(), "MidPathFollower Node Initialized.");
     }
 
 private:
-    void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
+    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
+
+    /**
+     * @brief Extracts the average range distance for a given angular segment.
+     * @param data The LaserScan message.
+     * @param angle_deg The central angle of the segment (in degrees).
+     * @param width_deg The width of the segment (total angle) to average over.
+     * @return The filtered average distance in meters.
+     */
+    double getSegmentDistance(const sensor_msgs::msg::LaserScan::SharedPtr data, 
+                              double angle_deg, double width_deg = 5.0)
     {
-        double right_sum = 0.0, right_count = 0.0;
-        double front_sum = 0.0, front_count = 0.0;
-        
-        double angle_min = msg->angle_min;
-        double angle_inc = msg->angle_increment;
-        
-        for(size_t i = 0; i < msg->ranges.size(); i++)
-        {
-            double r = msg->ranges[i];
-            if(std::isinf(r) || r < min_lidar_range_) continue;
-            
-            double angle = angle_min + i * angle_inc;
-            
-            if(angle > -M_PI/2 && angle < -M_PI/6) { 
-                right_sum += r; 
-                right_count++; 
-            }
+        double angle_rad = angle_deg * M_PI / 180.0;
+        double min_angle_rad = data->angle_min;
+        double angle_increment = data->angle_increment;
+        size_t ranges_size = data->ranges.size();
 
-            if(angle > -M_PI/12 && angle < M_PI/12) { 
-                front_sum += r; 
-                front_count++; 
-            }
+        // Calculate start and end index
+        double start_angle = angle_rad - (width_deg / 2.0) * M_PI / 180.0;
+        double end_angle = angle_rad + (width_deg / 2.0) * M_PI / 180.0;
 
-        }
-        
-        double right_dist = (right_count > 0) ? right_sum/right_count : 5.0;
-        double front_dist = (front_count > 0) ? front_sum/front_count : 5.0;
-        
-        geometry_msgs::msg::Twist cmd;
-        cmd.linear.x = 0.0;
-        cmd.angular.z = 0.0;
-        
-        if(turning_)
-        {
-            handleTurning(cmd, right_dist, front_dist);
-        }
-        else
-        {
+        size_t start_index = static_cast<size_t>(std::floor((start_angle - min_angle_rad) / angle_increment));
+        size_t end_index = static_cast<size_t>(std::ceil((end_angle - min_angle_rad) / angle_increment));
 
-            if(front_dist < panic_distance_)
+        // Clamp indices
+        start_index = std::max(0UL, start_index);
+        end_index = std::min(ranges_size, end_index);
+
+        std::vector<double> valid_ranges;
+        for (size_t i = start_index; i < end_index; ++i)
+        {
+            double range = data->ranges[i];
+            // Filter out invalid readings (NaN, Inf, or below min_range)
+            if (std::isnormal(range) && range >= data->range_min && range <= data->range_max)
             {
-                RCLCPP_INFO(this->get_logger(), "Obstacle detected! Turning left. Front: %.2fm", front_dist);
-                initiateTurn("left");
-                cmd.angular.z = max_angular_;
-                cmd.linear.x = 0.0;
-                rclcpp::Rate loop_rate(1.0);
+                valid_ranges.push_back(range);
             }
+        }
 
-            else if(right_dist > wall_lost_threshold_)
+        if (valid_ranges.empty())
+        {
+            // If no valid readings, return a large distance to indicate open space
+            return MAX_RANGE_REPLACEMENT;
+        }
+
+        // Calculate average
+        double sum = std::accumulate(valid_ranges.begin(), valid_ranges.end(), 0.0);
+        return sum / valid_ranges.size();
+    }
+
+    void scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
+    {
+        // 1. Get filtered distance readings for key directions
+        
+        // Frontal scan (0 degrees)
+        double D_front = getSegmentDistance(msg, 0.0);
+        // Right side (90 degrees clockwise = -90 degrees)
+        double D_right = getSegmentDistance(msg, -90.0);
+        // Left side (90 degrees counter-clockwise = +90 degrees)
+        double D_left = getSegmentDistance(msg, 90.0);
+
+        auto twist = geometry_msgs::msg::Twist();
+        double angular_vel = 0.0;
+
+        // 2. OBSTACLE/BLOCKED FRONT CHECK
+        if (D_front < MIN_CORRIDOR_WIDTH)
+        {
+            // Stop forward motion immediately
+            twist.linear.x = 0.0;
+            
+            // Decide turn direction: rotate towards the side with max clearance
+            if (D_left > D_right)
             {
-                RCLCPP_INFO(this->get_logger(), "Wall lost on right! Turning right. Right: %.2fm", right_dist);
-                initiateTurn("right");
-                cmd.angular.z = -max_angular_;
-                rclcpp::Rate loop_rate(1.0);
-                cmd.linear.x = 0.0;
+                // Turn Left (positive angular velocity)
+                angular_vel = MAX_ANGULAR_VEL;
+                RCLCPP_WARN(this->get_logger(), "Front Blocked (%.2fm). Rotating Left (Clearance L: %.2fm).", D_front, D_left);
             }
-
             else
             {
-                followWall(cmd, right_dist, front_dist);
+                // Turn Right (negative angular velocity)
+                angular_vel = -MAX_ANGULAR_VEL;
+                RCLCPP_WARN(this->get_logger(), "Front Blocked (%.2fm). Rotating Right (Clearance R: %.2fm).", D_front, D_right);
             }
         }
-        
-        cmd_pub_->publish(cmd);
-    }
-    
-    void initiateTurn(const std::string& direction)
-    {
-        turning_ = true;
-        turn_direction_ = direction;
-        turn_progress_ = 0.0;
-        turn_start_time_ = this->now();
-    }
-    
-    void handleTurning(geometry_msgs::msg::Twist& cmd, double right_dist, double front_dist)
-    {
+        else 
+        {
+            // 3. CENTERING LOGIC (Path is clear ahead)
+            twist.linear.x = LINEAR_SPEED;
+            
+            // A corridor is detected if both left and right see a wall within the maximum expected width
+            bool is_in_corridor = (D_right < MAX_CORRIDOR_WIDTH) && (D_left < MAX_CORRIDOR_WIDTH);
 
-        auto elapsed = this->now() - turn_start_time_;
-        turn_progress_ = elapsed.seconds() * max_angular_;
-        
-        if(turn_direction_ == "left")
-        {
-            cmd.linear.x = 0.0;
-            cmd.angular.z = max_angular_;
-            rclcpp::Rate loop_rate(1.0);
+            if (is_in_corridor)
+            {
+                // Calculate total width and target center distance
+                double corridor_width = D_right + D_left;
+                double target_midpoint_distance = corridor_width / 2.0;
+
+                // Error: D_left - target_midpoint_distance.
+                // Positive error (D_left is larger): Robot is too far right -> needs negative (right) turn.
+                double centering_error = D_left - target_midpoint_distance;
+                
+                // Apply Proportional control for steering
+                angular_vel = -KP_STEER * centering_error;
+                
+                // Clamp angular velocity
+                angular_vel = std::min(std::max(angular_vel, -MAX_ANGULAR_VEL), MAX_ANGULAR_VEL);
+                
+                RCLCPP_INFO(this->get_logger(), "W: %.2f, D_L: %.2f, Error: %.2f, Angular: %.2f", 
+                            corridor_width, D_left, centering_error, angular_vel);
+            }
+            else
+            {
+                // Edge case: In a wide open space or junction, just move straight.
+                angular_vel = 0.0;
+                RCLCPP_INFO(this->get_logger(), "Path wide open. Moving straight.");
+            }
         }
-        else
-        {
-            cmd.linear.x = max_linear_;
-            cmd.angular.z = -max_angular_ * 0.4;
-            rclcpp::Rate loop_rate(0.2);
-        }
-        
-        if(turn_progress_ >= M_PI_2)
-        {
-            turning_ = false;
-            turn_progress_ = 0.0;
-            RCLCPP_INFO(this->get_logger(), "90 degree turn complete!");
-        }
-    }
-    
-    void followWall(geometry_msgs::msg::Twist& cmd, double right_dist, double front_dist)
-    {
-        double error = right_dist - desired_distance_;
-        double kp_angular = 2.0; 
-        
-        cmd.angular.z = -kp_angular * error;
-        
-        cmd.angular.z = std::max(-max_angular_, std::min(max_angular_, cmd.angular.z));
-        
-        if(front_dist < panic_distance_ * 0.6)
-        {
-            cmd.linear.x = max_linear_ * 0.2;
-        }
-        else if(front_dist < panic_distance_) 
-        {
-            cmd.linear.x = max_linear_ * 0.5;
-        }
-        else if(right_dist < min_safe_distance_)
-        {
-            cmd.linear.x = max_linear_ * 0.4;
-        }
-        else if(front_dist < desired_distance_ * 2.5) 
-        {
-            cmd.linear.x = max_linear_ * 0.7;
-        }
-        else
-        {
-            double speed_factor = 1.0 - std::abs(cmd.angular.z) / max_angular_ * 0.3;
-            cmd.linear.x = max_linear_ * speed_factor;
-        }
-        
-        if(right_dist < min_safe_distance_)
-        {
-            cmd.angular.z = std::max(cmd.angular.z, 0.8); 
-            cmd.linear.x = std::min(cmd.linear.x, max_linear_ * 0.1);
-            RCLCPP_WARN(this->get_logger(), "Too close to wall! Right: %.2f", right_dist);
-        }
+
+        // 4. Publish Command
+        twist.angular.z = angular_vel;
+        cmd_vel_pub_->publish(twist);
     }
 
-    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
-    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_pub_;
-    
-    double desired_distance_;
-    double max_linear_;
-    double max_angular_;
-    double panic_distance_;
-    double min_lidar_range_;
-    double side_threshold_;
-    double min_safe_distance_;
-    double wall_lost_threshold_;
-    
-    bool turning_;
-    std::string turn_direction_;
-    rclcpp::Time turn_start_time_;
-    double turn_progress_;
+    void stopRobot()
+    {
+        auto twist = geometry_msgs::msg::Twist();
+        twist.linear.x = 0.0;
+        twist.angular.z = 0.0;
+        cmd_vel_pub_->publish(twist);
+    }
 };
 
-int main(int argc, char **argv)
+int main(int argc, char * argv[])
 {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<WallFollowNode>());
+    auto node = std::make_shared<MidPathFollower>();
+    rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
 }
