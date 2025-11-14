@@ -29,3 +29,5 @@ Makefile
 
 # ROS2 launch-generated logs
 *.launch.py~*
+
+worlds/generated_maze.sdf

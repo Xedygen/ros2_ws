@@ -4,162 +4,169 @@
 #include <cmath>
 #include <algorithm>
 #include <numeric>
+#include <vector>
 
 using std::placeholders::_1;
 
 // --- Configuration Constants ---
-// These should be tuned based on your robot's speed and maze cell size (1.8m)
-const double LINEAR_SPEED = 1;   // m/s
-const double KP_STEER = 0.8;       // Proportional gain for steering
-const double MAX_ANGULAR_VEL = 0.8; // rad/s (Also used as dedicated turn speed)
+const double LINEAR_SPEED = 0.5;   // m/s - Forward speed when path is clear
+const double ANGULAR_SPEED = 0.8;  // rad/s - Speed for rotational movement
+const double KP_STEER = 1.0;       // Proportional gain for steering
+const double TARGET_WALL_DISTANCE = 0.9; // m - Target distance to maintain from the right wall (half of 1.8m path width)
+const double STOP_OBSTACLE_DISTANCE = 0.9; // m - Distance considered "blocked" directly ahead
 
-// Thresholds for Wall Detection
-const double MAX_CORRIDOR_WIDTH = 1.8; 
-const double MIN_CORRIDOR_WIDTH = 1.8;
-const double MAX_RANGE_REPLACEMENT = 50.0; // Value to use if max range/inf is detected
+// Wall detection threshold (If distance is > this, there's an opening/no wall)
+const double MAX_WALL_DISTANCE = 1.6;
 
-class MidPathFollower : public rclcpp::Node
+// Fixed time calculation for 90-degree turn (PI/2 radians at 0.8 rad/s)
+// This is used for dead ends (Left Turns) but is avoided for Right turns.
+const double TURN_DURATION_90_DEG = M_PI / 2.0 / ANGULAR_SPEED; 
+
+// Define states for the robot's behavior
+enum class State {
+    FORWARD_FOLLOW_RIGHT,
+    COMMITTING_TURN
+};
+
+class RightWallFollower : public rclcpp::Node
 {
 public:
-    MidPathFollower() : Node("mid_path_follower")
+    RightWallFollower() : Node("right_wall_follower")
     {
         cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
         scan_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
-            "/scan", 10, std::bind(&MidPathFollower::scanCallback, this, _1));
-        RCLCPP_INFO(this->get_logger(), "MidPathFollower Node Initialized.");
+            "scan", 10, std::bind(&RightWallFollower::scanCallback, this, _1));
+            
+        current_state_ = State::FORWARD_FOLLOW_RIGHT;
+        turn_start_time_ = this->now();
+        RCLCPP_INFO(this->get_logger(), "RightWallFollower Node Initialized. Following Right Wall.");
     }
 
 private:
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
     rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
+    State current_state_;
+    rclcpp::Time turn_start_time_;
+    double turn_duration_ = 0.0;
+    double turn_direction_ = 0.0; // 1.0 for left turn, -1.0 for right turn
 
     /**
-     * @brief Extracts the average range distance for a given angular segment.
+     * @brief Extracts the minimum range distance for a given angular segment.
      * @param data The LaserScan message.
      * @param angle_deg The central angle of the segment (in degrees).
-     * @param width_deg The width of the segment (total angle) to average over.
-     * @return The filtered average distance in meters.
+     * @param width_deg The width of the segment (total angle) to check over.
+     * @return The minimum valid distance in meters in that segment.
      */
-    double getSegmentDistance(const sensor_msgs::msg::LaserScan::SharedPtr data, 
-                              double angle_deg, double width_deg = 5.0)
+    double getMinSegmentDistance(const sensor_msgs::msg::LaserScan::SharedPtr data, 
+                                 double angle_deg, double width_deg = 10.0)
     {
         double angle_rad = angle_deg * M_PI / 180.0;
         double min_angle_rad = data->angle_min;
         double angle_increment = data->angle_increment;
         size_t ranges_size = data->ranges.size();
 
-        // Calculate start and end index
         double start_angle = angle_rad - (width_deg / 2.0) * M_PI / 180.0;
         double end_angle = angle_rad + (width_deg / 2.0) * M_PI / 180.0;
 
         size_t start_index = static_cast<size_t>(std::floor((start_angle - min_angle_rad) / angle_increment));
         size_t end_index = static_cast<size_t>(std::ceil((end_angle - min_angle_rad) / angle_increment));
 
-        // Clamp indices
+        // Clamp indices to valid range
         start_index = std::max(0UL, start_index);
         end_index = std::min(ranges_size, end_index);
 
-        std::vector<double> valid_ranges;
+        double min_range = std::numeric_limits<double>::infinity();
+
         for (size_t i = start_index; i < end_index; ++i)
         {
             double range = data->ranges[i];
-            // Filter out invalid readings (NaN, Inf, or below min_range)
-            if (std::isnormal(range) && range >= data->range_min && range <= data->range_max)
+            if (std::isnormal(range) && range >= data->range_min)
             {
-                valid_ranges.push_back(range);
+                min_range = std::min(min_range, range);
             }
         }
-
-        if (valid_ranges.empty())
-        {
-            // If no valid readings, return a large distance to indicate open space
-            return MAX_RANGE_REPLACEMENT;
-        }
-
-        // Calculate average
-        double sum = std::accumulate(valid_ranges.begin(), valid_ranges.end(), 0.0);
-        return sum / valid_ranges.size();
+        return min_range;
     }
 
     void scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
     {
-        // 1. Get filtered distance readings for key directions
+        // 1. Get distance readings
+        double D_front = getMinSegmentDistance(msg, 0.0, 10.0);    // Check directly ahead
+        double D_right = getMinSegmentDistance(msg, -90.0, 10.0);  // Check right side (for following)
+        double D_front_right = getMinSegmentDistance(msg, -45.0, 5.0); // Check diagonal right (for corner anticipation)
         
-        // Frontal scan (0 degrees)
-        double D_front = getSegmentDistance(msg, 0.0);
-        // Right side (90 degrees clockwise = -90 degrees)
-        double D_right = getSegmentDistance(msg, -90.0);
-        // Left side (90 degrees counter-clockwise = +90 degrees)
-        double D_left = getSegmentDistance(msg, 90.0);
-
         auto twist = geometry_msgs::msg::Twist();
-        double angular_vel = 0.0;
 
-        // 2. OBSTACLE/BLOCKED FRONT CHECK
-        if (D_front < MIN_CORRIDOR_WIDTH)
+        switch (current_state_)
         {
-            // Stop forward motion immediately
-            twist.linear.x = 0.0;
-            
-            // Decide turn direction: rotate towards the side with max clearance
-            if (D_left > D_right)
+            case State::FORWARD_FOLLOW_RIGHT:
             {
-                // Turn Left (positive angular velocity)
-                angular_vel = MAX_ANGULAR_VEL;
-                RCLCPP_WARN(this->get_logger(), "Front Blocked (%.2fm). Rotating Left (Clearance L: %.2fm).", D_front, D_left);
-            }
-            else
-            {
-                // Turn Right (negative angular velocity)
-                angular_vel = -MAX_ANGULAR_VEL;
-                RCLCPP_WARN(this->get_logger(), "Front Blocked (%.2fm). Rotating Right (Clearance R: %.2fm).", D_front, D_right);
-            }
-        }
-        else 
-        {
-            // 3. CENTERING LOGIC (Path is clear ahead)
-            twist.linear.x = LINEAR_SPEED;
-            
-            // A corridor is detected if both left and right see a wall within the maximum expected width
-            bool is_in_corridor = (D_right < MAX_CORRIDOR_WIDTH) && (D_left < MAX_CORRIDOR_WIDTH);
+                // --- Decision Logic Priority (Right-Hand Rule) ---
 
-            if (is_in_corridor)
-            {
-                // Calculate total width and target center distance
-                double corridor_width = D_right + D_left;
-                double target_midpoint_distance = corridor_width / 2.0;
+                // RULE 3: Open Corridor / Turn Right (High Priority)
+                // If the diagonal right path is wide open, commit to a RIGHT turn.
+                if (D_front_right > MAX_WALL_DISTANCE)
+                {
+                    current_state_ = State::COMMITTING_TURN;
+                    turn_start_time_ = this->now();
+                    turn_duration_ = TURN_DURATION_90_DEG;
+                    turn_direction_ = -1.0; // Right turn (Negative angular velocity)
+                    RCLCPP_WARN(this->get_logger(), "Right Opening (%.2fm). Committing 90 deg RIGHT Turn.", D_front_right);
+                }
+                // RULE 2: Front Blocked / Must Turn Left (Dead End)
+                // If the front is blocked and D_front_right is NOT open (i.e., we hit a wall/corner)
+                else if (D_front < STOP_OBSTACLE_DISTANCE)
+                {
+                    current_state_ = State::COMMITTING_TURN;
+                    turn_start_time_ = this->now();
+                    turn_duration_ = TURN_DURATION_90_DEG;
+                    turn_direction_ = 1.0; // Left turn (Positive angular velocity)
+                    RCLCPP_WARN(this->get_logger(), "Front Blocked (%.2fm). Committing 90 deg LEFT Turn.", D_front);
+                }
+                // RULE 1: Default to Right Wall Following
+                else
+                {
+                    // Calculate P-Control for alignment
+                    double wall_following_error = TARGET_WALL_DISTANCE - D_right;
+                    double angular_vel = -KP_STEER * wall_following_error; 
+                    
+                    // Cap rotation speed
+                    angular_vel = std::min(std::max(angular_vel, -ANGULAR_SPEED), ANGULAR_SPEED);
 
-                // Error: D_left - target_midpoint_distance.
-                // Positive error (D_left is larger): Robot is too far right -> needs negative (right) turn.
-                double centering_error = D_left - target_midpoint_distance;
-                
-                // Apply Proportional control for steering
-                angular_vel = -KP_STEER * centering_error;
-                
-                // Clamp angular velocity
-                angular_vel = std::min(std::max(angular_vel, -MAX_ANGULAR_VEL), MAX_ANGULAR_VEL);
-                
-                RCLCPP_INFO(this->get_logger(), "W: %.2f, D_L: %.2f, Error: %.2f, Angular: %.2f", 
-                            corridor_width, D_left, centering_error, angular_vel);
+                    twist.linear.x = LINEAR_SPEED;
+                    twist.angular.z = angular_vel;
+                    RCLCPP_INFO(this->get_logger(), "Following Right Wall (D_R: %.2fm). Angular: %.2f", D_right, angular_vel);
+                }
+                break;
             }
-            else
+
+            case State::COMMITTING_TURN:
             {
-                // Edge case: In a wide open space or junction, just move straight.
-                angular_vel = 0.0;
-                RCLCPP_INFO(this->get_logger(), "Path wide open. Moving straight.");
+                // Execute fixed-time turn
+                rclcpp::Duration elapsed_time = this->now() - turn_start_time_;
+                
+                if (elapsed_time.seconds() < turn_duration_)
+                {
+                    // Continue turning for the calculated duration
+                    twist.linear.x = 0.0; // Rotate in place
+                    twist.angular.z = turn_direction_ * ANGULAR_SPEED; 
+                    RCLCPP_INFO(this->get_logger(), "Turning (Time Left: %.2f / %.2f s)", turn_duration_ - elapsed_time.seconds(), turn_duration_);
+                }
+                else
+                {
+                    // Turn duration complete, switch back to forward following
+                    current_state_ = State::FORWARD_FOLLOW_RIGHT;
+                    RCLCPP_INFO(this->get_logger(), "90-degree Turn Complete. Resuming Right Wall Follow.");
+                    
+                    // Publish stop command immediately to zero out velocity
+                    twist.linear.x = 0.0;
+                    twist.angular.z = 0.0;
+                }
+                break;
             }
         }
 
         // 4. Publish Command
-        twist.angular.z = angular_vel;
-        cmd_vel_pub_->publish(twist);
-    }
-
-    void stopRobot()
-    {
-        auto twist = geometry_msgs::msg::Twist();
-        twist.linear.x = 0.0;
-        twist.angular.z = 0.0;
         cmd_vel_pub_->publish(twist);
     }
 };
@@ -167,7 +174,7 @@ private:
 int main(int argc, char * argv[])
 {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<MidPathFollower>();
+    auto node = std::make_shared<RightWallFollower>();
     rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
