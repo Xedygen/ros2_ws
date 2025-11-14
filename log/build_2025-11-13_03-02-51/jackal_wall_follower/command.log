@@ -1,0 +1,4 @@
+Invoking command in '/home/xedy/ros2_ws/build/jackal_wall_follower': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/xedy/ros2_ws/src/jackal_wall_follower -DCMAKE_INSTALL_PREFIX=/home/xedy/ros2_ws/install/jackal_wall_follower
+Invoked command in '/home/xedy/ros2_ws/build/jackal_wall_follower' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/xedy/ros2_ws/src/jackal_wall_follower -DCMAKE_INSTALL_PREFIX=/home/xedy/ros2_ws/install/jackal_wall_follower
+Invoking command in '/home/xedy/ros2_ws/build/jackal_wall_follower': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/xedy/ros2_ws/build/jackal_wall_follower -- -j16 -l16
+Invoked command in '/home/xedy/ros2_ws/build/jackal_wall_follower' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/xedy/ros2_ws/build/jackal_wall_follower -- -j16 -l16

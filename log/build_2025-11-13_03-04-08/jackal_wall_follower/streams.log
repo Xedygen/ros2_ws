@@ -1,0 +1,10 @@
+[0.006s] Invoking command in '/home/xedy/ros2_ws/build/jackal_wall_follower': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/xedy/ros2_ws/build/jackal_wall_follower -- -j16 -l16
+[0.032s] [35m[1mConsolidate compiler generated dependencies of target main_node[0m
+[0.038s] [ 50%] [32m[1mLinking CXX executable main_node[0m
+[0.086s] /usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o: in function `_start':
+[0.086s] (.text+0x1b): undefined reference to `main'
+[0.087s] collect2: error: ld returned 1 exit status
+[0.088s] gmake[2]: *** [CMakeFiles/main_node.dir/build.make:175: main_node] Error 1
+[0.088s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/main_node.dir/all] Error 2
+[0.088s] gmake: *** [Makefile:146: all] Error 2
+[0.090s] Invoked command in '/home/xedy/ros2_ws/build/jackal_wall_follower' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/xedy/ros2_ws/build/jackal_wall_follower -- -j16 -l16

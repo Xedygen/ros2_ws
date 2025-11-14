@@ -1,0 +1,99 @@
+[0.000000] (-) TimerEvent: {}
+[0.000597] (jackal_wall_follower) JobQueued: {'identifier': 'jackal_wall_follower', 'dependencies': OrderedDict()}
+[0.000734] (jackal_wall_follower) JobStarted: {'identifier': 'jackal_wall_follower'}
+[0.005454] (jackal_wall_follower) JobProgress: {'identifier': 'jackal_wall_follower', 'progress': 'cmake'}
+[0.005757] (jackal_wall_follower) JobProgress: {'identifier': 'jackal_wall_follower', 'progress': 'build'}
+[0.006360] (jackal_wall_follower) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/xedy/ros2_ws/build/jackal_wall_follower', '--', '-j16', '-l16'], 'cwd': '/home/xedy/ros2_ws/build/jackal_wall_follower', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'xedy'), ('LC_TIME', 'bg_BG.UTF-8'), ('XDG_SESSION_TYPE', 'wayland'), ('SHLVL', '2'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/xedy'), ('OLDPWD', '/home/xedy'), ('DESKTOP_SESSION', 'ubuntu'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('LC_MONETARY', 'bg_BG.UTF-8'), ('SYSTEMD_EXEC_PID', '2046'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'xedy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'xedy'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/xedygen:@/tmp/.ICE-unix/1773,unix/xedygen:/tmp/.ICE-unix/1773'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'bg_BG.UTF-8'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/ebf39e31_6f91_4186_b7ca_a979fdb5d079'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'bg_BG.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.TO1YF3'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.98'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'bg_BG.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'bg_BG.UTF-8'), ('LC_IDENTIFICATION', 'bg_BG.UTF-8'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/xedy/ros2_ws/build/jackal_wall_follower'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/home/xedy/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'bg_BG.UTF-8'), ('LC_PAPER', 'bg_BG.UTF-8'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.037773] (jackal_wall_follower) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target main_node\x1b[0m\n'}
+[0.050445] (jackal_wall_follower) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/main_node.dir/src/main_node.cpp.o\x1b[0m\n'}
+[0.099863] (-) TimerEvent: {}
+[0.200105] (-) TimerEvent: {}
+[0.300381] (-) TimerEvent: {}
+[0.400987] (-) TimerEvent: {}
+[0.501578] (-) TimerEvent: {}
+[0.602226] (-) TimerEvent: {}
+[0.702602] (-) TimerEvent: {}
+[0.803230] (-) TimerEvent: {}
+[0.904027] (-) TimerEvent: {}
+[1.004769] (-) TimerEvent: {}
+[1.105138] (-) TimerEvent: {}
+[1.205622] (-) TimerEvent: {}
+[1.306114] (-) TimerEvent: {}
+[1.406745] (-) TimerEvent: {}
+[1.507086] (-) TimerEvent: {}
+[1.607512] (-) TimerEvent: {}
+[1.707917] (-) TimerEvent: {}
+[1.808338] (-) TimerEvent: {}
+[1.908920] (-) TimerEvent: {}
+[2.009389] (-) TimerEvent: {}
+[2.109964] (-) TimerEvent: {}
+[2.210567] (-) TimerEvent: {}
+[2.310915] (-) TimerEvent: {}
+[2.411309] (-) TimerEvent: {}
+[2.511898] (-) TimerEvent: {}
+[2.612751] (-) TimerEvent: {}
+[2.713350] (-) TimerEvent: {}
+[2.813785] (-) TimerEvent: {}
+[2.914283] (-) TimerEvent: {}
+[3.014670] (-) TimerEvent: {}
+[3.115328] (-) TimerEvent: {}
+[3.215657] (-) TimerEvent: {}
+[3.316063] (-) TimerEvent: {}
+[3.416353] (-) TimerEvent: {}
+[3.516672] (-) TimerEvent: {}
+[3.617136] (-) TimerEvent: {}
+[3.717833] (-) TimerEvent: {}
+[3.818560] (-) TimerEvent: {}
+[3.919039] (-) TimerEvent: {}
+[4.019832] (-) TimerEvent: {}
+[4.120459] (-) TimerEvent: {}
+[4.220966] (-) TimerEvent: {}
+[4.321570] (-) TimerEvent: {}
+[4.421982] (-) TimerEvent: {}
+[4.522747] (-) TimerEvent: {}
+[4.623215] (-) TimerEvent: {}
+[4.724363] (-) TimerEvent: {}
+[4.825045] (-) TimerEvent: {}
+[4.925611] (-) TimerEvent: {}
+[5.026456] (-) TimerEvent: {}
+[5.126950] (-) TimerEvent: {}
+[5.227234] (-) TimerEvent: {}
+[5.327761] (-) TimerEvent: {}
+[5.428562] (-) TimerEvent: {}
+[5.528893] (-) TimerEvent: {}
+[5.629159] (-) TimerEvent: {}
+[5.729396] (-) TimerEvent: {}
+[5.829785] (-) TimerEvent: {}
+[5.917582] (jackal_wall_follower) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable main_node\x1b[0m\n'}
+[5.929896] (-) TimerEvent: {}
+[6.030211] (-) TimerEvent: {}
+[6.130516] (-) TimerEvent: {}
+[6.155255] (jackal_wall_follower) StdoutLine: {'line': b'[100%] Built target main_node\n'}
+[6.163218] (jackal_wall_follower) CommandEnded: {'returncode': 0}
+[6.164032] (jackal_wall_follower) JobProgress: {'identifier': 'jackal_wall_follower', 'progress': 'install'}
+[6.171432] (jackal_wall_follower) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/xedy/ros2_ws/build/jackal_wall_follower'], 'cwd': '/home/xedy/ros2_ws/build/jackal_wall_follower', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'xedy'), ('LC_TIME', 'bg_BG.UTF-8'), ('XDG_SESSION_TYPE', 'wayland'), ('SHLVL', '2'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/xedy'), ('OLDPWD', '/home/xedy'), ('DESKTOP_SESSION', 'ubuntu'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('LC_MONETARY', 'bg_BG.UTF-8'), ('SYSTEMD_EXEC_PID', '2046'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'xedy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'xedy'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/xedygen:@/tmp/.ICE-unix/1773,unix/xedygen:/tmp/.ICE-unix/1773'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'bg_BG.UTF-8'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/ebf39e31_6f91_4186_b7ca_a979fdb5d079'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'bg_BG.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.TO1YF3'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.98'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'bg_BG.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'bg_BG.UTF-8'), ('LC_IDENTIFICATION', 'bg_BG.UTF-8'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/xedy/ros2_ws/build/jackal_wall_follower'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/home/xedy/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'bg_BG.UTF-8'), ('LC_PAPER', 'bg_BG.UTF-8'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[6.177004] (jackal_wall_follower) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[6.177205] (jackal_wall_follower) StdoutLine: {'line': b'-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/lib/jackal_wall_follower/main_node\n'}
+[6.180338] (jackal_wall_follower) StdoutLine: {'line': b'-- Set runtime path of "/home/xedy/ros2_ws/install/jackal_wall_follower/lib/jackal_wall_follower/main_node" to ""\n'}
+[6.180410] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//launch\n'}
+[6.180498] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//launch/start.launch.py\n'}
+[6.180563] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//worlds\n'}
+[6.180593] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//worlds/maze.sdf\n'}
+[6.180646] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/ament_index/resource_index/package_run_dependencies/jackal_wall_follower\n'}
+[6.180674] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/ament_index/resource_index/parent_prefix_path/jackal_wall_follower\n'}
+[6.180717] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/ament_prefix_path.sh\n'}
+[6.180747] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/ament_prefix_path.dsv\n'}
+[6.180776] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/path.sh\n'}
+[6.180806] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/path.dsv\n'}
+[6.180835] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.bash\n'}
+[6.180865] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.sh\n'}
+[6.180894] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.zsh\n'}
+[6.180923] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.dsv\n'}
+[6.180951] (jackal_wall_follower) StdoutLine: {'line': b'-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/package.dsv\n'}
+[6.180980] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/ament_index/resource_index/packages/jackal_wall_follower\n'}
+[6.181041] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/cmake/jackal_wall_followerConfig.cmake\n'}
+[6.181090] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/cmake/jackal_wall_followerConfig-version.cmake\n'}
+[6.181122] (jackal_wall_follower) StdoutLine: {'line': b'-- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/package.xml\n'}
+[6.182658] (jackal_wall_follower) CommandEnded: {'returncode': 0}
+[6.192464] (jackal_wall_follower) JobEnded: {'identifier': 'jackal_wall_follower', 'rc': 0}
+[6.192900] (-) EventReactorShutdown: {}

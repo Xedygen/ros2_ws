@@ -1,0 +1,29 @@
+[ 50%] [32mBuilding CXX object CMakeFiles/main_node.dir/src/main_node.cpp.o[0m
+[01m[K/home/xedy/ros2_ws/src/jackal_wall_follower/src/main_node.cpp:[m[K In member function ‘[01m[Kvoid WallFollowNode::scan_callback(sensor_msgs::msg::LaserScan_<std::allocator<void> >::SharedPtr)[m[K’:
+[01m[K/home/xedy/ros2_ws/src/jackal_wall_follower/src/main_node.cpp:17:69:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kmsg[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+   17 |    void scan_callback([01;35m[Kconst sensor_msgs::msg::LaserScan::SharedPtr msg[m[K)
+      |                       [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+
+[100%] [32m[1mLinking CXX executable main_node[0m
+[100%] Built target main_node
+-- Install configuration: ""
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/lib/jackal_wall_follower/main_node
+-- Set runtime path of "/home/xedy/ros2_ws/install/jackal_wall_follower/lib/jackal_wall_follower/main_node" to ""
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//launch
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//launch/start.launch.py
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//worlds
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/ament_index/resource_index/package_run_dependencies/jackal_wall_follower
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/ament_index/resource_index/parent_prefix_path/jackal_wall_follower
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/ament_prefix_path.sh
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/ament_prefix_path.dsv
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/path.sh
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/path.dsv
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.bash
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.sh
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.zsh
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.dsv
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/package.dsv
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/ament_index/resource_index/packages/jackal_wall_follower
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/cmake/jackal_wall_followerConfig.cmake
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/cmake/jackal_wall_followerConfig-version.cmake
+-- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/package.xml

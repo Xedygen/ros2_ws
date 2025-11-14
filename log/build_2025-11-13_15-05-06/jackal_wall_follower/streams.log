@@ -1,0 +1,30 @@
+[0.007s] Invoking command in '/home/xedy/ros2_ws/build/jackal_wall_follower': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/xedy/ros2_ws/build/jackal_wall_follower -- -j16 -l16
+[0.041s] [35m[1mConsolidate compiler generated dependencies of target main_node[0m
+[0.053s] [ 50%] [32mBuilding CXX object CMakeFiles/main_node.dir/src/main_node.cpp.o[0m
+[5.792s] [100%] [32m[1mLinking CXX executable main_node[0m
+[6.028s] [100%] Built target main_node
+[6.037s] Invoked command in '/home/xedy/ros2_ws/build/jackal_wall_follower' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/xedy/ros2_ws/build/jackal_wall_follower -- -j16 -l16
+[6.044s] Invoking command in '/home/xedy/ros2_ws/build/jackal_wall_follower': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/xedy/ros2_ws/build/jackal_wall_follower
+[6.051s] -- Install configuration: ""
+[6.051s] -- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/lib/jackal_wall_follower/main_node
+[6.054s] -- Set runtime path of "/home/xedy/ros2_ws/install/jackal_wall_follower/lib/jackal_wall_follower/main_node" to ""
+[6.054s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//launch
+[6.054s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//launch/start.launch.py
+[6.054s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//worlds
+[6.054s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower//worlds/maze.sdf
+[6.054s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/ament_index/resource_index/package_run_dependencies/jackal_wall_follower
+[6.054s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/ament_index/resource_index/parent_prefix_path/jackal_wall_follower
+[6.055s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/ament_prefix_path.sh
+[6.055s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/ament_prefix_path.dsv
+[6.055s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/path.sh
+[6.055s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/environment/path.dsv
+[6.055s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.bash
+[6.055s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.sh
+[6.055s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.zsh
+[6.056s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/local_setup.dsv
+[6.056s] -- Installing: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/package.dsv
+[6.057s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/ament_index/resource_index/packages/jackal_wall_follower
+[6.057s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/cmake/jackal_wall_followerConfig.cmake
+[6.057s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/cmake/jackal_wall_followerConfig-version.cmake
+[6.057s] -- Up-to-date: /home/xedy/ros2_ws/install/jackal_wall_follower/share/jackal_wall_follower/package.xml
+[6.057s] Invoked command in '/home/xedy/ros2_ws/build/jackal_wall_follower' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/xedy/ros2_ws/build/jackal_wall_follower
