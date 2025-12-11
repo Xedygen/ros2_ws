@@ -13,12 +13,11 @@ find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rclcpp_components REQUIRED)
 
-# Executable
 add_executable(main_node src/main_node.cpp)
 ament_target_dependencies(main_node
   rclcpp
-  sensor_msgs
   geometry_msgs
+  sensor_msgs
   std_msgs
 )
 
@@ -27,12 +26,10 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Install launch files
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}/
 )
 
-# Install worlds
 install(DIRECTORY worlds
   DESTINATION share/${PROJECT_NAME}/
 )
