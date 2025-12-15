@@ -2,8 +2,8 @@ import random
 import os
 
 # --- Configuration ---
-cells_x = 8
-cells_y = 8
+cells_x = 16
+cells_y = 16
 cell_size = 1.8
 wall_thickness = 0.5
 wall_height = 1
