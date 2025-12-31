@@ -1,12 +1,22 @@
 import random
 import os
+import argparse
 
 # --- Configuration ---
-cells_x = 16
-cells_y = 16
-cell_size = 1.8
-wall_thickness = 0.5
+parser = argparse.ArgumentParser(description="Generate a maze SDF world")
+parser.add_argument("--cells-x", type=int, default=8, help="Maze width in cells")
+args = parser.parse_args()
+
+cells_x = args.cells_x
+cells_y = cells_x
+
+# --- DIMENSIONS CONFIGURATION ---
+desired_path_width = 1.8  # The clear space for the robot to drive
+wall_thickness = 0.5      # The thickness of the wall obstacles
 wall_height = 1
+
+# Calculate cell_size (center-to-center distance) to guarantee the path width
+cell_size = desired_path_width + wall_thickness  # Equals 2.3m
 
 maze_width = cells_x * cell_size
 maze_height = cells_y * cell_size
@@ -141,7 +151,7 @@ def generate_sdf():
             <real_time_update_rate>1000</real_time_update_rate>
         </physics>
 
-        <!-- Plugins remain the same -->
+        <!-- Plugins -->
         <plugin name="gz::sim::systems::Physics" filename="gz-sim-physics-system" />
         <plugin name="gz::sim::systems::UserCommands" filename="gz-sim-user-commands-system" />
         <plugin name="gz::sim::systems::SceneBroadcaster" filename="gz-sim-scene-broadcaster-system" />
@@ -345,5 +355,5 @@ with open(output_path, 'w') as f:
 
 print(f"Generated maze with {num_walls} links (walls + corners)")
 print(f"Maze size: {cells_x}x{cells_y} cells ({maze_width}m x {maze_height}m)")
+print(f"Path Width: {desired_path_width}m (Cell Size: {cell_size}m)")
 print(f"Saved to: {output_path}")
-print(f"Internal walls removed: {len(removed_h_walls)} horizontal, {len(removed_v_walls)} vertical")
