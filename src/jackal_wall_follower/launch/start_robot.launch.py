@@ -11,7 +11,8 @@ def generate_launch_description():
         parameters=[{'use_sim_time': True}], 
         remappings=[
             ('/scan', '/j100_0000/sensors/lidar3d_0/scan'),
-            ('/cmd_vel', '/j100_0000/cmd_vel')
+            ('/cmd_vel', '/j100_0000/cmd_vel'),
+            ('/odom', '/j100_0000/platform/odom')
         ]
     )
 

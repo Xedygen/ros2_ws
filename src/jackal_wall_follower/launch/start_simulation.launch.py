@@ -13,8 +13,8 @@ def generate_launch_description():
         ),
         launch_arguments={
             'world': world_path,
-            'x': '-13.5',
-            'y': '-13.5',
+            'x': '-17.25',
+            'y': '-17.25',
             'paused': 'true' 
         }.items()
     )

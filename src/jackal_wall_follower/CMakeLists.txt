@@ -12,6 +12,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rclcpp_components REQUIRED)
+find_package(nav_msgs REQUIRED)
 
 add_executable(main_node src/main_node.cpp)
 ament_target_dependencies(main_node
@@ -19,6 +20,7 @@ ament_target_dependencies(main_node
   geometry_msgs
   sensor_msgs
   std_msgs
+  nav_msgs
 )
 
 install(TARGETS

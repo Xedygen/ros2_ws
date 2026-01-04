@@ -17,9 +17,8 @@ def generate_launch_description():
         ),
         launch_arguments={
             'world': '~/ros2_ws/worlds/generated_maze',
-            'x': '-13.5',
-            'y': '-13.5',
-            'paused': 'true'
+            'x': '-8.05',
+            'y': '-8.05',
             }.items()
     )
 
@@ -31,12 +30,13 @@ def generate_launch_description():
         parameters=[{'use_sim_time': True}],
         remappings=[
             ('/scan', '/j100_0000/sensors/lidar3d_0/scan'),
-            ('/cmd_vel', '/j100_0000/cmd_vel')
+            ('/cmd_vel', '/j100_0000/cmd_vel'),
+            ('/odom/filtered', '/j100_0000/platform/odom/filtered')
         ]
     )
 
     delayed_wall_follow = TimerAction(
-        period=20.0,
+        period=5.0,
         actions=[wall_follow_node]
     )
 
