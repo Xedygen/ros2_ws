@@ -9,7 +9,7 @@ import sys
 import random
 
 # === Configuration ===
-MAZE_DIM = 16        # Internal maze size (16x16)
+MAZE_DIM = 8        # Internal maze size (16x16)
 BORDER_WIDTH = 1     # Width of the surrounding border
 FRAME_DELAY_MS = 50  # Animation speed
 PATH_FILE = 'path_log.txt'
@@ -154,7 +154,7 @@ def load_path_coordinates(filename):
                 if clean_line and '#' not in clean_line:
                     parts = clean_line.split(',')
                     if len(parts) >= 2:
-                        coords.append((int(float(parts[0])), int(float(parts[1]))))
+                        coords.append((int(float(parts[1])), int(float(parts[0]))))
     except ValueError as e:
         print(f"Error parsing coordinate file: {e}")
         sys.exit(1)

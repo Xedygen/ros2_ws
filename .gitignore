@@ -31,3 +31,5 @@ Makefile
 *.launch.py~*
 
 worlds/generated_maze.sdf
+
+path_log.txt
